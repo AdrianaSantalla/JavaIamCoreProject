@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- The whole file is known as a "Document" according to the DOM specifications --><!-- XML stands for eXtensible Markup Language, so data are represented with markups, organized in a hierarchical way --><!-- this tag is named the root "Element" --><identities>
+	
+	<!-- this tag is the child of "identities", this is an Element -->
+	<identity>
+		<!-- the 'name="displayName"' part is called an attribute declaration -->
+		<property name="displayName">Thomas</property> <!-- "Thomas" is the "TextContent" of the "property" Element-->
+		<property name="email">tbr@tbr.com</property>
+		<property name="guid">123456789</property>
+	</identity>
+	<identity>
+		<property name="displayName">Clement</property>
+		<property name="email">cle@tbr.com</property>
+		<property name="guid">98746541</property>
+	</identity>
+	<identity>
+		<property name="displayName">Quentin Decayeux</property>
+		<property name="email">qdc@qdc.com</property>
+		<property name="guid">123</property>
+	</identity>
+	<identity>
+		<property name="displayName">Sandy Guilleaumau</property>
+		<property name="email">sgu@qdc.com</property>
+		<property name="guid">456</property>
+	</identity>
+<identity><property name="displayName">Adriana</property><property name="email">adri@adri.com</property><property name="guid">89498</property></identity></identities>

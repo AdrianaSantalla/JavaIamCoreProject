@@ -4,7 +4,7 @@
 package fr.epita.iamcoreproject.launcher;
 
 /**
- * @author Usuario
+ * @author Adriana Santalla
  *
  */
 public class Main {
