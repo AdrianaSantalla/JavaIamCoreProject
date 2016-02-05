@@ -6,6 +6,7 @@ package fr.epita.iamcoreproject.launcher;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,7 +34,15 @@ public class Main {
 			int selectedOption=-1;
 			do{
 				showMenu();
-				selectedOption = Integer.parseInt(scanner.nextLine());
+//				selectedOption = Integer.parseInt(scanner.nextLine());
+				try {
+		    		selectedOption = scanner.nextInt();
+		    	} catch (InputMismatchException e) {
+		    	    System.err.println("Please input a number: ");
+		    	    scanner.nextLine();
+		    	    continue;
+		    	}
+				scanner.nextLine();
 				switch(selectedOption){
 				case 1: 
 					readAllIdentities();
