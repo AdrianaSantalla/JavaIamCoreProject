@@ -5,7 +5,7 @@
 		<!-- the 'name="displayName"' part is called an attribute declaration -->
 		<property name="displayName">Thomas</property> <!-- "Thomas" is the "TextContent" of the "property" Element-->
 		<property name="email">tbr@tbr.com</property>
-		<property name="uid">123456789</property>
+		<property name="uid">123456</property>
 		<property name="birthDate">15/03/1973</property>
 		<property name="password">123456789</property>
 		<property name="type">admin</property>
@@ -13,7 +13,7 @@
 	<identity>
 		<property name="displayName">Clement</property>
 		<property name="email">cle@tbr.com</property>
-		<property name="uid">98746541</property>
+		<property name="uid">987465</property>
 		<property name="birthDate">25/06/1975</property>
 		<property name="password"/>
 		<property name="type">normal</property>
@@ -21,7 +21,7 @@
 	<identity>
 		<property name="displayName">Quentin</property>
 		<property name="email">qdc@qdc.com</property>
-		<property name="uid">123</property>
+		<property name="uid">123132</property>
 		<property name="birthDate">10/10/1962</property>
 		<property name="password"/>
 		<property name="type">normal</property>
@@ -29,7 +29,7 @@
 	<identity>
 		<property name="displayName">Sandy</property>
 		<property name="email">sgu@qdc.com</property>
-		<property name="uid">456</property>
+		<property name="uid">456123</property>
 		<property name="birthDate">10/06/1964</property>
 		<property name="password"/>
 		<property name="type">normal</property>
@@ -37,7 +37,7 @@
 	<identity>
 		<property name="displayName">Adriana</property>
 		<property name="email">adri2@adri.com</property>
-		<property name="uid">89498</property>
+		<property name="uid">894811</property>
 		<property name="birthDate">27/06/1964</property>
 		<property name="password"/>
 		<property name="type">normal</property>
@@ -45,7 +45,7 @@
 	<identity>
 		<property name="displayName">test</property>
 		<property name="email">test@test.com</property>
-		<property name="uid">6720771</property>
+		<property name="uid">672771</property>
 		<property name="birthDate">27/09/1991</property>
 		<property name="password"/>
 		<property name="type">normal</property>

@@ -30,7 +30,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Identities Application Management");
-		authentication(scanner);
+		authentication();
 		int selectedOption=-1;
 		do{
 			showMenu();
@@ -59,6 +59,7 @@ public class Main {
 				searchIdentity();
 				break;
 			case 0: 
+				scanner.close();
 				System.out.println("Goodbye!");
 				break;
 			default:
@@ -88,7 +89,7 @@ public class Main {
 	    System.out.println("|__________________________|");
 	}
 
-	private static void authentication(Scanner scanner) {
+	private static void authentication() {
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		boolean state = false;
 		while(!state){
