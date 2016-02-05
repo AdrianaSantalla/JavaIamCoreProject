@@ -30,46 +30,45 @@ public class Main {
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Identities Application Management");
-		if(authentication(scanner)) {
-			int selectedOption=-1;
-			do{
-				showMenu();
-//				selectedOption = Integer.parseInt(scanner.nextLine());
-				try {
-		    		selectedOption = scanner.nextInt();
-		    	} catch (InputMismatchException e) {
-		    	    System.err.println("Please input a number: ");
-		    	    scanner.nextLine();
-		    	    continue;
-		    	}
-				scanner.nextLine();
-				switch(selectedOption){
-				case 1: 
-					readAllIdentities();
-					break;
-				case 2: 
-					createIdentity();
-					break;
-				case 3: 
-					updateIdentity();
-					break;
-				case 4: 
-					deleteIdentity();
-					break;
-				case 5: 
-					searchIdentity();
-					break;
-				case 0: 
-					System.out.println("Goodbye!");
-					break;
-				default:
-					System.out.println("Invalid option");
-					break;
-				}
+		authentication(scanner);
+		int selectedOption=-1;
+		do{
+			showMenu();
+			try {
+	    		selectedOption = scanner.nextInt();
+	    	} catch (InputMismatchException e) {
+	    	    System.err.println("Please input a number: ");
+	    	    scanner.nextLine();
+	    	    continue;
+	    	}
+			scanner.nextLine();
+			switch(selectedOption){
+			case 1: 
+				readAllIdentities();
+				break;
+			case 2: 
+				createIdentity();
+				break;
+			case 3: 
+				updateIdentity();
+				break;
+			case 4: 
+				deleteIdentity();
+				break;
+			case 5: 
+				searchIdentity();
+				break;
+			case 0: 
+				System.out.println("Goodbye!");
+				break;
+			default:
+				System.out.println("Invalid option");
+				break;
+			}
 				
 			}
 			while(selectedOption!=0);			
-		}
+		
 //		else
 //			System.exit(0);		
 	}
@@ -89,36 +88,39 @@ public class Main {
 	    System.out.println("|__________________________|");
 	}
 
-	private static boolean authentication(Scanner scanner) {
+	private static void authentication(Scanner scanner) {
 		IdentityDAOInterface dao = new IdentityXmlDAO();
-		System.out.println("\nAuthentication");
-		System.out.println("\nPlease enter your username: ");
-		String username = scanner.nextLine();
-		System.out.println("\nPlease enter your password: ");
-		String password = scanner.nextLine();
-		Identity user = new Identity();
-		user.setDisplayName(username);
-		if(!dao.findIdentity(user).isEmpty())
-		{
-			currentUser = dao.findIdentity(user).get(0);
-			if(currentUser.getType().equals("admin")) {
-				if(currentUser.getDisplayName().equals(username) && currentUser.getPassword().equals(password)) {
-					System.out.println("\nWelcome "+username);
-					return true;
+		boolean state = false;
+		while(!state){
+			System.out.println("\nAuthentication");
+			System.out.println("Please enter your username: ");
+			String username = scanner.nextLine();
+			System.out.println("Please enter your password: ");
+			String password = scanner.nextLine();
+			Identity user = new Identity();
+			user.setDisplayName(username);
+			if(!dao.findIdentity(user).isEmpty())
+			{
+				currentUser = dao.findIdentity(user).get(0);
+				if(currentUser.getType().equals("admin")) {
+					if(currentUser.getDisplayName().equals(username) && currentUser.getPassword().equals(password)) {
+						System.out.println("\nWelcome "+username);
+						state = true;
+					}
+					else {
+						System.out.println("\nAuthentication failed");
+						state = false;
+					}
 				}
 				else {
-					System.out.println("\nAuthentication failed");
-					return false;
+					System.out.println("\nYou are not an admin user");
+					state = false;
 				}
 			}
 			else {
-				System.out.println("\nYou are not an admin user");
-				return false;
+				System.out.println("\nUnexisting user");
+				state = false;
 			}
-		}
-		else {
-			System.out.println("\nUnexisting user");
-			return false;
 		}
 	}
 	
