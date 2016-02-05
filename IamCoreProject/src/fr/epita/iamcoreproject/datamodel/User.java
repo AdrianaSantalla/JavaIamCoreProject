@@ -5,10 +5,19 @@ package fr.epita.iamcoreproject.datamodel;
  * @author Adriana Santalla
  *
  */
-public class User {
+public class User extends Identity{
 	
 	String username;
 	String password;
+	int loginFailed;
+	boolean blocked;
+	
+	/**
+	 * 
+	 */
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public User(String username, String password)
 	{

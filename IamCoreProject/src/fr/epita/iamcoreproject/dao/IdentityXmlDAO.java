@@ -1,7 +1,11 @@
 package fr.epita.iamcoreproject.dao;
 
 import java.io.File;
+import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,6 +23,7 @@ import org.w3c.dom.NodeList;
 import fr.epita.iamcoreproject.dao.exceptions.DaoUpdateException;
 import fr.epita.iamcoreproject.datamodel.Identity;
 import fr.epita.iamcoreproject.services.match.Matcher;
+import fr.epita.iamcoreproject.services.match.impl.EqualsIdentityMatcher;
 import fr.epita.iamcoreproject.services.match.impl.StartsWithIdentityMatcher;
 
 public class IdentityXmlDAO implements IdentityDAOInterface {
@@ -30,63 +35,83 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-
 			document = db.parse(new File("identities.xml"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO handle exception
+		} finally{
+			if (document != null){
+				document.getDocumentElement();
+			}
 		}
 	}
 
 	public List<Identity> readAll() {
 
+		//This is creating an anonymous implementation of the Matcher interface and 
+		//instantiating it at the same time
+		return internalSearch(null, new Matcher<Identity>(){
+			public boolean match(Identity criteria, Identity toBeMatched) {
+				return true;
+			}
+		});
+	}
+	
+	private List<Identity> internalSearch(Identity criteria, Matcher<Identity> identityMatcher){
 		ArrayList<Identity> resultList = new ArrayList<Identity>();
 		NodeList identitiesList = document.getElementsByTagName("identity");
 		int length = identitiesList.getLength();
 		for (int i = 0; i < length; i++) {
 			Element identity = (Element) identitiesList.item(i);
-			NodeList properties = identity.getElementsByTagName("property");
-			resultList.add(readIdentity(properties));
+			Identity identityInstance = readIdentityFromXmlElement(identity);
+			if(identityMatcher.match(criteria, identityInstance)){
+				resultList.add(identityInstance);
+			}
 		}
-		return resultList;
+		return resultList;		
 	}
 
-	private Identity readIdentity(NodeList properties) {
+	private Identity readIdentityFromXmlElement(Element identity) {
+		NodeList properties = identity.getElementsByTagName("property");
 		Identity identityInstance = new Identity();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		for (int j = 0; j < properties.getLength(); j++) {
 			Element property = (Element) properties.item(j);
 			String attribute = property.getAttribute("name");
-//			System.out.println(attribute + " : "
-//					+ property.getTextContent());
 			String value = property.getTextContent().trim();
-			switch (attribute) {
-			case "displayName":
-				identityInstance.setDisplayName(value);
-				break;
-			case "email":
-				identityInstance.setEmail(value);
-				break;
-
-			case "guid":
-				identityInstance.setUid(value);
-				break;
+			if(attribute.equals("birthDate"))
+			{
+				try {
+					Date parsedDate = simpleDateFormat.parse(value);
+					identityInstance.setBirthDate(parsedDate);
+				} catch (ParseException e) {
+					// TODO Check if the birthDate should provoke the cancellation of the current identity reading
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+				Class<?> clazz = identityInstance.getClass();
+				//clazz.getDeclaredField(attribute);
+				String capitalizedAttribute = Character.toUpperCase(attribute.charAt(0)) + attribute.substring(1);
+				try {
+					Method method = clazz.getMethod("set"+capitalizedAttribute,String.class);
+					method.invoke(identityInstance, value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return identityInstance;
 	}
 
 	public List<Identity> search(Identity criteria) {
-		List<Identity> resultsList = new ArrayList<Identity>();
-		NodeList identitiesList = document.getElementsByTagName("identity");
-		int length = identitiesList.getLength();
-		for (int i = 0; i < length; i++) {
-			Element identity = (Element) identitiesList.item(i);
-			NodeList properties = identity.getElementsByTagName("property");
-			Identity identityInstance = readIdentity(properties);
-			if(activeMatchingStrategy.match(criteria, identityInstance))
-				resultsList.add(identityInstance);
-		}
-		return resultsList;
+		return internalSearch(criteria, activeMatchingStrategy);
+	}
+	
+	public List<Identity> findUser(Identity criteria) {
+		Matcher<Identity> activeMatchingStrategy = new EqualsIdentityMatcher();
+		return internalSearch(criteria, activeMatchingStrategy);
 	}
 
 	@Override
@@ -103,7 +128,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		emailProperty.setTextContent(identity.getEmail());
 		
 		Element uidProperty = document.createElement("property");
-		uidProperty.setAttribute("name","guid");
+		uidProperty.setAttribute("name","uid");
 		uidProperty.setTextContent(identity.getUid());
 		
 		newIdentity.appendChild(displayNameProperty);
@@ -143,7 +168,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 			NodeList properties = identity.getElementsByTagName("property");
 			for (int j = 0; j < properties.getLength(); j++) {
 				Element property = (Element) properties.item(j);
-				if(property.getAttribute("name").equals("guid") && property.getTextContent().trim().equals(identityUpdated.getUid()))
+				if(property.getAttribute("name").equals("uid") && property.getTextContent().trim().equals(identityUpdated.getUid()))
 				{
 					identitiesTag.removeChild(identity);
 					modifyXmlFile();
@@ -164,7 +189,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 			NodeList properties = identity.getElementsByTagName("property");
 			for (int j = 0; j < properties.getLength(); j++) {
 				Element property = (Element) properties.item(j);
-				if(property.getAttribute("name").equals("guid") && property.getTextContent().trim().equals(identityToDelete.getUid()))
+				if(property.getAttribute("name").equals("uid") && property.getTextContent().trim().equals(identityToDelete.getUid()))
 				{
 					Element identitiesTag = document.getDocumentElement();
 					identitiesTag.removeChild(identity);

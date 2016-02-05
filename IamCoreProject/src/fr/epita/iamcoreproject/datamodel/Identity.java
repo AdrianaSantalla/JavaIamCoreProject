@@ -14,6 +14,8 @@ public class Identity {
 	private String email;
 	private String displayName;
 	private Date birthDate;
+	private String password;
+	private String type;
 	
 	/**
 	 * 
@@ -92,6 +94,37 @@ public class Identity {
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
 	
-	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Identity [uid=" + uid + ", email=" + email + ", displayName=" + displayName + ", birthDate=" + birthDate
+				+ ", password=" + password + ", type=" + type + "]";
+	}	
 }

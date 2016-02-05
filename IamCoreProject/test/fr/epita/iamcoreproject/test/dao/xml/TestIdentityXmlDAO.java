@@ -14,7 +14,7 @@ public class TestIdentityXmlDAO {
 		// TODO Auto-generated method stub
 		
 //		testSearch();
-		testCreate();
+//		testCreate();
 //		testDelete();
 //		testUpdate();
 		testReadAll();
