@@ -109,13 +109,14 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		return internalSearch(criteria, activeMatchingStrategy);
 	}
 	
-	public List<Identity> findUser(Identity criteria) {
+	public List<Identity> findIdentity(Identity criteria) {
 		Matcher<Identity> activeMatchingStrategy = new EqualsIdentityMatcher();
 		return internalSearch(criteria, activeMatchingStrategy);
 	}
 
 	@Override
 	public void create(Identity identity) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Element identitiesTag = document.getDocumentElement();
 		Element newIdentity = document.createElement("identity");
 		
@@ -131,9 +132,25 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		uidProperty.setAttribute("name","uid");
 		uidProperty.setTextContent(identity.getUid());
 		
+		Element bithdateProperty = document.createElement("property");
+		bithdateProperty.setAttribute("name","birthDate");
+		bithdateProperty.setTextContent(simpleDateFormat.format(identity.getBirthDate()));
+		
+		Element passwordProperty = document.createElement("property");
+		passwordProperty.setAttribute("name","password");
+		passwordProperty.setTextContent(identity.getPassword());
+		
+		Element typeProperty = document.createElement("property");
+		typeProperty.setAttribute("name","type");
+		typeProperty.setTextContent(identity.getType());
+		
 		newIdentity.appendChild(displayNameProperty);
 		newIdentity.appendChild(emailProperty);
 		newIdentity.appendChild(uidProperty);
+		newIdentity.appendChild(bithdateProperty);
+		newIdentity.appendChild(passwordProperty);
+		newIdentity.appendChild(typeProperty);
+		
 		
 		identitiesTag.appendChild(newIdentity);
 		
@@ -158,25 +175,6 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	@Override
 	public void update(Identity identityUpdated) throws DaoUpdateException {
 		// TODO Auto-generated method stub
-		NodeList identitiesList = document.getElementsByTagName("identity");
-		int length = identitiesList.getLength();
-		Element identitiesTag = document.getDocumentElement();
-		
-		outerloop:
-		for (int i = 0; i < length; i++) {
-			Element identity = (Element) identitiesList.item(i);
-			NodeList properties = identity.getElementsByTagName("property");
-			for (int j = 0; j < properties.getLength(); j++) {
-				Element property = (Element) properties.item(j);
-				if(property.getAttribute("name").equals("uid") && property.getTextContent().trim().equals(identityUpdated.getUid()))
-				{
-					identitiesTag.removeChild(identity);
-					modifyXmlFile();
-					create(identityUpdated);
-					break outerloop;
-				}
-			}	
-		}
 	}
 
 	@Override
@@ -198,6 +196,24 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 				}
 			}
 		}
+	}
+	
+	public Identity bindIdentities(Identity identityStored, Identity newIdentity){
+		String uid, displayName, email;
+		Date birthdate;
+		uid = newIdentity.getUid();
+		if(!uid.equals(""))
+			identityStored.setUid(uid);
+		displayName = newIdentity.getDisplayName();
+		if(!displayName.equals(""))
+			identityStored.setDisplayName(displayName);
+		email = newIdentity.getEmail();
+		if(!email.equals(""))
+			identityStored.setEmail(email);
+		birthdate = newIdentity.getBirthDate();
+		if(birthdate != null)
+			identityStored.setBirthDate(birthdate);
+		return identityStored;
 	}
 
 }

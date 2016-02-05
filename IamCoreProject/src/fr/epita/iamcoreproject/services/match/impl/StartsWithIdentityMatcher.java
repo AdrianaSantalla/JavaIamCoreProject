@@ -8,14 +8,19 @@ public class StartsWithIdentityMatcher implements Matcher<Identity> {
 	@Override
 	public boolean match(Identity criteria, Identity toBeMatched) {
 		
-		String email = criteria.getEmail(), displayName = criteria.getDisplayName();
+		String email = criteria.getEmail();
+		String displayName = criteria.getDisplayName();
+		String uid = criteria.getUid();
 		boolean startsWithEmail=false;
 		boolean startsWithDisplayName=false;
-		if(email != null)
+		boolean startsWithUid=false;
+		if(!email.equals(""))
 			startsWithEmail = toBeMatched.getEmail().startsWith(email);
-		if(displayName != null)
+		if(!displayName.equals(""))
 			startsWithDisplayName = toBeMatched.getDisplayName().startsWith(displayName);
-		return startsWithEmail || startsWithDisplayName;
+		if(!uid.equals(""))
+			startsWithUid = toBeMatched.getUid().startsWith(uid);
+		return startsWithEmail || startsWithDisplayName || startsWithUid;
 	}
 
 }

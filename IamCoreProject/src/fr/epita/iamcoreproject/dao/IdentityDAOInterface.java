@@ -14,6 +14,9 @@ public interface IdentityDAOInterface {
 	public void update(Identity identity) throws DaoUpdateException;
 	public void delete(Identity identity);
 	
-	//functions to manage the authentication
-	public List<Identity> findUser(Identity criteria);
+	//function to find and specific user
+	public List<Identity> findIdentity(Identity criteria);
+	
+	//function to "bind" an identity stored and an identity comming from GUI
+	public Identity bindIdentities(Identity identityStored, Identity newIdentity);
 }

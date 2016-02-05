@@ -15,38 +15,39 @@
 		<property name="email">cle@tbr.com</property>
 		<property name="uid">98746541</property>
 		<property name="birthDate">25/06/1975</property>
-		<property name="password"></property>
+		<property name="password"/>
 		<property name="type">normal</property>
 	</identity>
 	<identity>
-		<property name="displayName">Quentin Decayeux</property>
+		<property name="displayName">Quentin</property>
 		<property name="email">qdc@qdc.com</property>
 		<property name="uid">123</property>
 		<property name="birthDate">10/10/1962</property>
-		<property name="password"></property>
+		<property name="password"/>
 		<property name="type">normal</property>
 	</identity>
 	<identity>
-		<property name="displayName">Sandy Guilleaumau</property>
+		<property name="displayName">Sandy</property>
 		<property name="email">sgu@qdc.com</property>
 		<property name="uid">456</property>
 		<property name="birthDate">10/06/1964</property>
-		<property name="password"></property>
+		<property name="password"/>
 		<property name="type">normal</property>
 	</identity>
 	<identity>
 		<property name="displayName">Adriana</property>
-		<property name="email">adri@adri.com</property>
+		<property name="email">adri2@adri.com</property>
 		<property name="uid">89498</property>
-		<property name="birthDate">27/09/1991</property>
-		<property name="password"></property>
+		<property name="birthDate">27/06/1964</property>
+		<property name="password"/>
 		<property name="type">normal</property>
 	</identity>
 	<identity>
 		<property name="displayName">test</property>
 		<property name="email">test@test.com</property>
-		<property name="uid">364698</property>
-		<property name="password"></property>
+		<property name="uid">6720771</property>
+		<property name="birthDate">27/09/1991</property>
+		<property name="password"/>
 		<property name="type">normal</property>
 	</identity>
 </identities>
