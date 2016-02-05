@@ -1,12 +1,15 @@
 package fr.epita.iamcoreproject.dao;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,7 +38,11 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			document = db.parse(new File("identities.xml"));
+			Properties properties = getPropertiesConfigurationFile();
+			// getting the property values
+			String xmlFile = properties.getProperty("xmlFile");
+			
+			document = db.parse(new File(xmlFile));
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO handle exception
@@ -44,6 +51,15 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 				document.getDocumentElement();
 			}
 		}
+	}
+	
+	private static Properties getPropertiesConfigurationFile() throws IOException {
+		File file = new File("config.properties");
+		FileInputStream fileInput = new FileInputStream(file);
+		Properties properties = new Properties();
+		properties.load(fileInput);
+		fileInput.close();
+		return properties;
 	}
 
 	public List<Identity> readAll() {

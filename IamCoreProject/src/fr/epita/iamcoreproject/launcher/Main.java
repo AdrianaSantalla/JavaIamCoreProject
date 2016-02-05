@@ -117,10 +117,11 @@ public class Main {
 
 	private static void printListIdentities(List<Identity> list) {
 		System.out.println("DisplayName\t\tEmail\t\tUID\t\tBirthday\t\tType");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		for (Identity identity : list){
 			System.out.println(identity.getDisplayName()+"\t\t"+
 					identity.getEmail()+"\t\t"+identity.getUid()+"\t\t"+
-					identity.getBirthDate()+"\t\t"+identity.getType());
+					simpleDateFormat.format(identity.getBirthDate())+"\t\t"+identity.getType());
 		}
 	}
 	
