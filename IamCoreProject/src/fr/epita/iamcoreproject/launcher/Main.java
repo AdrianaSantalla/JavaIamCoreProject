@@ -66,14 +66,18 @@ public class Main {
 	}
 	
 	private static void showMenu(){
-		System.out.println("\nMenu\n");
-		System.out.println("Choose an option:");
-		System.out.println("1. Show all Identities");
-		System.out.println("2. Create an Identity");
-		System.out.println("3. Update an Identity");
-		System.out.println("4. Delete an Identity");
-		System.out.println("5. Search an Identity");		
-		System.out.println("0. Exit\n");
+		// Display menu
+	    System.out.println("____________________________");
+	    System.out.println("|       MAIN MENU          |");
+	    System.out.println("|__________________________|");
+	    System.out.println("|  Choose an option:       |");
+	    System.out.println("|        1. Show all       |");
+	    System.out.println("|        2. Create         |");
+	    System.out.println("|        3. Update         |");
+	    System.out.println("|        4. Delete         |");
+	    System.out.println("|        5. Search         |");
+	    System.out.println("|        0. Exit           |");
+	    System.out.println("|__________________________|");
 	}
 
 	private static boolean authentication(Scanner scanner) {
