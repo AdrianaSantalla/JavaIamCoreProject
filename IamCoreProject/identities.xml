@@ -57,11 +57,5 @@
 		<property name="birthDate">05/08/19978</property>
 		<property name="password"/><property name="type">normal</property>
 	</identity>
-	<identity>
-		<property name="displayName">David Čechák</property>
-		<property name="email">david.cechak@gmail.com</property>
-		<property name="uid">123741</property>
-		<property name="birthDate">19/01/1995</property>
-		<property name="password"/><property name="type">normal</property>
-	</identity>
-</identities>
+	
+<identity><property name="displayName">David</property><property name="email">david@gmail.com</property><property name="uid">123741</property><property name="birthDate">19/01/1995</property><property name="password"/><property name="type">normal</property></identity></identities>
