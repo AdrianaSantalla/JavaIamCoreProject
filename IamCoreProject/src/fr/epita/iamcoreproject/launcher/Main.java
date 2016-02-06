@@ -15,23 +15,37 @@ import fr.epita.iamcoreproject.dao.IdentityXmlDAO;
 import fr.epita.iamcoreproject.dao.exceptions.DaoUpdateException;
 import fr.epita.iamcoreproject.datamodel.Identity;
 
+/**
+ * @author Adriana Stantalla and David Cechak
+ * @version 1
+ * @param (methods and constructors only)
+ * @return (methods only)
+ * @exception (@throws is a synonym added in Javadoc 1.2)
+ *
+ */
 
 /**
- * @author Adriana Santalla
- *
+ * Main class for IAM project, displays menu, manages user choices, gathers user input for DAO functions and calls them
+ * @author Adriana Stantalla and David Cechak
+ * @version 1
+ * 
  */
 public class Main {
 
-	/**
-	 * @param args
-	 */
 	static Scanner scanner = new Scanner(System.in);
 	static Identity currentUser;
 	
+	/**
+	 * Main method, manages user choices
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param selectedOption stores option selected by the user
+	 * 
+	 */
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Identities Application Management");
 		authentication();
-		int selectedOption=-1;
+		int selectedOption = -1;
 		do{
 			showMenu();
 			try {
@@ -43,37 +57,38 @@ public class Main {
 	    	}
 			scanner.nextLine();
 			switch(selectedOption){
-			case 1: 
-				readAllIdentities();
-				break;
-			case 2: 
-				createIdentity();
-				break;
-			case 3: 
-				updateIdentity();
-				break;
-			case 4: 
-				deleteIdentity();
-				break;
-			case 5: 
-				searchIdentity();
-				break;
-			case 0: 
-				scanner.close();
-				System.out.println("Goodbye!");
-				break;
-			default:
-				System.out.println("Invalid option");
-				break;
+				case 1: 
+					readAllIdentities();
+					break;
+				case 2: 
+					createIdentity();
+					break;
+				case 3: 
+					updateIdentity();
+					break;
+				case 4: 
+					deleteIdentity();
+					break;
+				case 5: 
+					searchIdentity();
+					break;
+				case 0: 
+					scanner.close();
+					System.out.println("Goodbye!");
+					break;
+				default:
+					System.out.println("Invalid option");
+					break;
 			}
-				
-			}
-			while(selectedOption!=0);			
-		
-//		else
-//			System.exit(0);		
+		}while(selectedOption!=0);				
 	}
 	
+	/**
+	 * Displays menu
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * 
+	 */
 	private static void showMenu(){
 		// Display menu
 	    System.out.println("____________________________");
@@ -89,16 +104,33 @@ public class Main {
 	    System.out.println("|__________________________|");
 	}
 
+	/**
+	 * Checks the user's login details
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param dao		IdentityXmlDAO to get access to the file and work with identities
+	 * @param state 	holds the status of user's authentication
+	 * @param username	stores user's login
+	 * @param password	stores user's password
+	 * @param user		identity to store authentication details
+	 * @see	fr.epita.iamcoreproject.datamodel.Identity.setDisplayName(String displayName)
+	 * @see	fr.epita.iamcoreproject.datamodel.Identity.getPassword()
+	 * @see	fr.epita.iamcoreproject.datamodel.Identity.getType()
+	 * @see	fr.epita.iamcoreproject.dao.findIdentity(Identity criteria)
+	 * @see fr.epita.iamcoreproject.dao.IdentityXmlDAO.IdentityXmlDAO()
+	 *
+	 */
 	private static void authentication() {
 		IdentityDAOInterface dao = new IdentityXmlDAO();
+		Identity user = new Identity();
 		boolean state = false;
+		
 		while(!state){
 			System.out.println("\nAuthentication");
 			System.out.println("Please enter your username: ");
 			String username = scanner.nextLine();
 			System.out.println("Please enter your password: ");
 			String password = scanner.nextLine();
-			Identity user = new Identity();
 			user.setDisplayName(username);
 			if(!dao.findIdentity(user).isEmpty())
 			{
@@ -125,12 +157,32 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Calls and prints all identities
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param dao IdentityXmlDAO to get access to the file and work with identities
+	 * @param list stores identities to print
+	 * @see	Main.printListIdentities(List<Identity> list)
+	 * @see fr.epita.iamcoreproject.dao.IdentityDAOInterface.readAll()
+	 * @see fr.epita.iamcoreproject.dao.IdentityXmlDAO.IdentityXmlDAO()
+	 *
+	 */
 	private static void readAllIdentities(){
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		List<Identity> list = dao.readAll();
 		printListIdentities(list);
 	}
 
+	/**
+	 * Manages the format and prints identities details
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param list with stored identities to print
+	 * @param simpleDataFormat ensures right date format
+	 * @see fr.epita.iamcoreproject.datamodel.Identity
+	 *
+	 */
 	private static void printListIdentities(List<Identity> list) {
 		System.out.println("DisplayName\t\tEmail\t\tUID\t\tBirthday\t\tType");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -141,6 +193,19 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Creates new identity without admin rights
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param dao IdentityXmlDAO to get access to the file and work with identities
+	 * @param newIdentity identity to be created
+	 * @see Main.readDataIdentityConsoleValidating()
+	 * @see fr.epita.iamcoreproject.datamodel.Identity.setPassword(String password)
+	 * @see fr.epita.iamcoreproject.datamodel.Identity.setType(String type)
+	 * @see fr.epita.iamcoreproject.dao.IdentityDAOInterface.create(Identity identity)
+	 * @see fr.epita.iamcoreproject.dao.IdentityXmlDAO.IdentityXmlDAO()
+	 *
+	 */
 	private static void createIdentity(){
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		Identity newIdentity = readDataIdentityConsoleValidating();
@@ -150,6 +215,22 @@ public class Main {
 		System.out.println("Identity succesfully created!");
 	}
 	
+	/**
+	 * Gathers user input for creating new identity, ensures that UID is unique,
+	 *  date has the right format and all fields are being filled 
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param dao IdentityXmlDAO to get access to the file and work with identities
+	 * @param displayName to set the name
+	 * @param email to set the email
+	 * @param uid to set the UID
+	 * @param birthdate to set the birthdate
+	 * @param date to save the birthdate in the right format
+	 * @return Identity
+	 * @see fr.epita.iamcoreproject.dao.IdentityXmlDAO.IdentityXmlDAO()
+	 * @see fr.epita.iamcoreproject.datamodel.Identity.Identity()
+	 *
+	 */
 	private static Identity readDataIdentityConsoleValidating(){
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		String displayName, email, uid, birthdate;
@@ -199,6 +280,14 @@ public class Main {
 		return identity;
 	}
 	
+	/**
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param (methods and constructors only)
+	 * @return (methods only)
+	 * @exception (@throws is a synonym added in Javadoc 1.2)
+	 *
+	 */
 	private static Identity readDataIdentityConsole(boolean letInsertExistingUID){
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		String displayName, email, uid, birthdate;
@@ -241,6 +330,13 @@ public class Main {
 		return identity;
 	}
 	
+	/**
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param (methods and constructors only)
+	 * @return (methods only)
+	 * @exception (@throws is a synonym added in Javadoc 1.2)
+	 */
 	private static void updateIdentity(){
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		String uid;
@@ -276,6 +372,14 @@ public class Main {
 		while(uid.equals(""));
 	}
 	
+	/**
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param (methods and constructors only)
+	 * @return (methods only)
+	 * @exception (@throws is a synonym added in Javadoc 1.2)
+	 *
+	 */
 	private static void deleteIdentity(){
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		String uid;
@@ -321,6 +425,14 @@ public class Main {
 		while(uid.equals(""));
 	}
 	
+	/**
+	 * @author Adriana Stantalla and David Cechak
+	 * @version 1
+	 * @param (methods and constructors only)
+	 * @return (methods only)
+	 * @exception (@throws is a synonym added in Javadoc 1.2)
+	 *
+	 */
 	private static void searchIdentity(){
 		System.out.println("Insert all the information that you want to search");
 		System.out.println("*If you do not want to search a given field, left it EMPTY pressing just ENTER");
