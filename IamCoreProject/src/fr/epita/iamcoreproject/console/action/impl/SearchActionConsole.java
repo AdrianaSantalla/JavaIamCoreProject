@@ -1,11 +1,12 @@
 /**
  * 
  */
-package fr.epita.iamcoreproject.console;
+package fr.epita.iamcoreproject.console.action.impl;
 
 import java.util.List;
 import java.util.Scanner;
 
+import fr.epita.iamcoreproject.console.action.ActionConsole;
 import fr.epita.iamcoreproject.dao.IdentityDAOInterface;
 import fr.epita.iamcoreproject.dao.IdentityXmlDAO;
 import fr.epita.iamcoreproject.datamodel.Identity;
@@ -55,9 +56,9 @@ public class SearchActionConsole implements ActionConsole{
 		System.out.println("* If you do not want to search a given field, left it EMPTY pressing just ENTER");
 		//reading data from console and creating and identity to send to dao
 		Identity newIdentity = readDataIdentityConsole();
-		//searching using dao
+		//creating dao
 		IdentityDAOInterface dao = new IdentityXmlDAO();
-		//receiving all the matches
+		//receiving all the matches using the dao search method
 		List<Identity> list = dao.search(newIdentity);
 		//printing those matches
 		System.out.println("Identities found:");

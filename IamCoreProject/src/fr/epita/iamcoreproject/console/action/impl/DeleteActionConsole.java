@@ -1,11 +1,12 @@
 /**
  * 
  */
-package fr.epita.iamcoreproject.console;
+package fr.epita.iamcoreproject.console.action.impl;
 
 import java.util.List;
 import java.util.Scanner;
 
+import fr.epita.iamcoreproject.console.action.ActionConsole;
 import fr.epita.iamcoreproject.dao.IdentityDAOInterface;
 import fr.epita.iamcoreproject.dao.IdentityXmlDAO;
 import fr.epita.iamcoreproject.datamodel.Identity;

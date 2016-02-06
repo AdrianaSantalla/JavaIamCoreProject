@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.epita.iamcoreproject.console;
+package fr.epita.iamcoreproject.console.action.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.epita.iamcoreproject.console.action.ActionConsole;
 import fr.epita.iamcoreproject.dao.IdentityDAOInterface;
 import fr.epita.iamcoreproject.dao.IdentityXmlDAO;
 import fr.epita.iamcoreproject.datamodel.Identity;
@@ -44,11 +45,8 @@ public class UpdateActionConsole implements ActionConsole{
 	 * updated. If the user does not introduce a valid uid, the application keeps asking.
 	 * 
 	 * <p>The <code>Scanner</code> is used to ask the user for the new data to update. The user can update
-	 * the displayName, email, uid and birthdate. The application ask for these fields but if the user just want to
-	 * search by email, he/she just have to leave empty the field asked.
-	 * 
-	 * <p>The <code>IdentityXmlDAO.search()</code> method has the implementation to search by all the
-	 * identities that matches any of the criteria.
+	 * the displayName, email, uid and birthdate. The application ask for these fields. If the user does
+	 * not want to update a given field, he/she just have to leave empty the field asked.
 	 * 
 	 * @see fr.epita.iamcoreproject.dao.IdentityXmlDAO
 	 * @see fr.epita.iamcoreproject.services.match.impl.StartsWithIdentityMatcher
@@ -56,24 +54,35 @@ public class UpdateActionConsole implements ActionConsole{
 	 */
 	@Override
 	public void execute() {
+		//Creating an instance of the DAO that will provide access to the data storage
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		String uid;
+		//do while loop to ask for a valid uid
 		do {
 			System.out.println("Insert the UID of the Identity you want to update:");
+			//reading the uid from console
 			uid = scanner.nextLine();
+			//creating an identity to look for it
 			Identity identity = new Identity();
 			identity.setUid(uid);
+			//if it has been found, try to update
 			List<Identity> identityFound = dao.findIdentity(identity);
 			if(!identityFound.isEmpty()){
+				//Showing the data from the identity to be updated
 				System.out.println("This is the actual data of the Identity:");
 				identity = identityFound.get(0);
 				System.out.println(identity.toReadableString());
+				//verifying that is not an admin account
 				if(!identity.getType().equals("admin")) {
 					System.out.println("\nInsert the new information for the identity");
 					System.out.println("*If you do not want to update the a given field, left it EMPTY pressing just ENTER");
+					//reading the new data
 					Identity newIdentity = readDataIdentityConsole();
+					//delete the old identity
 					dao.delete(identity);
+					//merging the identities
 					Identity combinedIdentity = dao.bindIdentities(identity, newIdentity);
+					//save the new identity merged with old and new data
 					dao.create(combinedIdentity);
 					System.out.println("Identity updated");
 				}
@@ -89,17 +98,39 @@ public class UpdateActionConsole implements ActionConsole{
 		}
 		while(uid.equals(""));
 	}
-	
+	/**
+	 * Internal method to validate all the data inserted by the user through the console.
+	 * <p>All the data is validated to avoid bad data inserted.
+	 * <p>It is <b>important</b> to remark that the user can insert the <code>Identity.uid</code>, 
+	 * but the application verifies that this uid has not been registered before.
+	 * 
+	 * In this case we allow empty data because the user might not want to update all fields, but if he/she
+	 * enters a new value, is validated to be correct
+	 * 
+	 * @return Identity Created based in the information inserted by the user
+	 * @return Identity 
+	 */
 	private Identity readDataIdentityConsole(){
+		//Creating an instance of the DAO that will provide access to the data storage
 		IdentityDAOInterface dao = new IdentityXmlDAO();
+		//Declaring variables needed to read the data
 		String displayName, email, uid, birthdate;
 		Date date = null;
 		System.out.println("Insert the Display Name:");
 		displayName = scanner.nextLine();
-		
-		System.out.println("Insert the Email:");
-		email = scanner.nextLine();
-						
+		//verifying that if an email is inserted, is valid
+		do{
+			System.out.println("Insert the Email:");
+			email = scanner.nextLine();
+			if(!email.equals("")){
+				if(!CreateActionConsole.isValidEmailAddress(email)){
+					System.out.println("Insert a valid email address.");
+					email=null;
+				}
+			}
+		}
+		while(email.equals(null));
+		//validating that if an uid is inserted, is valid			
 		do {
 			System.out.println("Insert the UID:");
 			uid = scanner.nextLine();
@@ -113,9 +144,9 @@ public class UpdateActionConsole implements ActionConsole{
 			}
 		}
 		while(uid==null);
-		
+		//validating that if a birthdate is inserted, is valid
 		do{
-			System.out.println("Insert the Birthday (dd/MM/yyyy):");
+			System.out.println("Insert the Birthdate (dd/MM/yyyy):");
 			birthdate = scanner.nextLine();
 			if(!birthdate.equals("")){
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -128,7 +159,7 @@ public class UpdateActionConsole implements ActionConsole{
 			}
 		}
 		while(birthdate.equals(null));
-		
+		//creating the new identity with all the data validated
 		Identity identity = new Identity(uid,email,displayName,date);
 		return identity;
 	}

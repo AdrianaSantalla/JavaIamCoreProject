@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.epita.iamcoreproject.console;
+package fr.epita.iamcoreproject.console.action;
 
 /**This is an interface for all the types of Actions in the Console.
  * <ul>

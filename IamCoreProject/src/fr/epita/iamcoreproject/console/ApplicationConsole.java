@@ -6,6 +6,13 @@ package fr.epita.iamcoreproject.console;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import fr.epita.iamcoreproject.console.action.impl.AuthenticateActionConsole;
+import fr.epita.iamcoreproject.console.action.impl.CreateActionConsole;
+import fr.epita.iamcoreproject.console.action.impl.DeleteActionConsole;
+import fr.epita.iamcoreproject.console.action.impl.ReadAllActionConsole;
+import fr.epita.iamcoreproject.console.action.impl.SearchActionConsole;
+import fr.epita.iamcoreproject.console.action.impl.UpdateActionConsole;
+
 /**
  * This is the main Console from the Application to manage Identities.
  * <p>First the <code>AuthenticateActionConsole</code> method <code>execute()</code> is called 
