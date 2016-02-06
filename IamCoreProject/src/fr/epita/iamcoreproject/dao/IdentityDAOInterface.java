@@ -5,6 +5,10 @@ import java.util.List;
 import fr.epita.iamcoreproject.dao.exceptions.DaoUpdateException;
 import fr.epita.iamcoreproject.datamodel.Identity;
 
+/**This is an interface for data access object implementations.
+ * @author Adriana Santalla and David Cechak
+ * @version 1;
+ */
 public interface IdentityDAOInterface {
 
 	//functions to manage the basic operation with identities
