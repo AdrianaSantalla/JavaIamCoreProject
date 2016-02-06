@@ -51,12 +51,12 @@ public class DeleteActionConsole implements ActionConsole {
 				}
 				else{
 					System.out.println("You cannot delete admins' accounts");
-					uid=null;
+					uid="";
 				}
 			}
 			else {
 				System.out.println("UID not founded. Insert another UID.");
-				uid=null;
+				uid="";
 			}				
 		}
 		while(uid.equals(""));

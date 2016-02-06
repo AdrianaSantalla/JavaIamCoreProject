@@ -26,14 +26,7 @@
 		<property name="password"/>
 		<property name="type">normal</property>
 	</identity>
-	<identity>
-		<property name="displayName">Sandy</property>
-		<property name="email">sgu@qdc.com</property>
-		<property name="uid">456123</property>
-		<property name="birthDate">10/06/1964</property>
-		<property name="password"/>
-		<property name="type">normal</property>
-	</identity>
+	
 	<identity>
 		<property name="displayName">Adriana</property>
 		<property name="email">adri2@adri.com</property>
@@ -42,20 +35,7 @@
 		<property name="password"/>
 		<property name="type">normal</property>
 	</identity>
-	<identity>
-		<property name="displayName">test</property>
-		<property name="email">test@test.com</property>
-		<property name="uid">672771</property>
-		<property name="birthDate">27/09/1991</property>
-		<property name="password"/>
-		<property name="type">normal</property>
-	</identity>
-	<identity>
-		<property name="displayName">test2</property>
-		<property name="email">tes2@test.com</property>
-		<property name="uid">6598984</property>
-		<property name="birthDate">05/08/19978</property>
-		<property name="password"/><property name="type">normal</property>
-	</identity>
+	
+	
 	
 <identity><property name="displayName">David</property><property name="email">david@gmail.com</property><property name="uid">123741</property><property name="birthDate">19/01/1995</property><property name="password"/><property name="type">normal</property></identity></identities>
