@@ -6,10 +6,6 @@ package fr.epita.iamcoreproject.console;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import fr.epita.iamcoreproject.dao.IdentityDAOInterface;
-import fr.epita.iamcoreproject.dao.IdentityXmlDAO;
-import fr.epita.iamcoreproject.datamodel.Identity;
-
 /**
  * This is the main Console from the Application.
  * <p>Here we first call the <code>AuthenticateActionConsole</code> method <code>execute()</code> 

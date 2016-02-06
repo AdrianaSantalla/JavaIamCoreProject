@@ -3,9 +3,6 @@
  */
 package fr.epita.iamcoreproject.console;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -35,7 +32,6 @@ public class SearchActionConsole implements ActionConsole{
 		}	
 	}
 	private Identity readDataIdentityConsole(){
-		IdentityDAOInterface dao = new IdentityXmlDAO();
 		String displayName, email, uid;
 		System.out.println("Insert the Display Name:");
 		displayName = scanner.nextLine();
