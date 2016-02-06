@@ -8,7 +8,9 @@ import java.util.Date;
 
 /**
  * This is the main concept of the project the Identity.
- * <p>An identity has the 6 attributes. The last two are to manage the login and type of account
+ * <p>An identity has the 6 attributes. The last two are to manage the login and type of account.
+ * Password is only for admin accounts, as they are they ones able to login and manage other identities.</p>
+ *  
  * 
  * @author Adriana Santalla and David Cechak
  * @version 1
@@ -25,7 +27,6 @@ public class Identity {
 	 * 
 	 */
 	public Identity() {
-		// TODO Auto-generated constructor stub
 	}
 	/**
 	 * @param uid
@@ -116,7 +117,11 @@ public class Identity {
 	public String getType() {
 		return type;
 	}
-	
+	/**
+	 * 
+	 * @param other
+	 * @return
+	 */
 	public boolean isMatched(Identity other) {
 		return getType().equals("admin") && getDisplayName().equals(other.getDisplayName()) 
 				&& getPassword().equals(other.getPassword());
@@ -137,14 +142,19 @@ public class Identity {
 		return "Identity [uid=" + uid + ", email=" + email + ", displayName=" + displayName + ", birthDate=" + birthDate
 				+ ", password=" + password + ", type=" + type + "]";
 	}
-	
+	/**
+	 * Transforms classic toString into a better human-readable table to be print for the user.
+	 * @return
+	 */
 	public String toReadableString() {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		return getDisplayName()+"\t\t"+
 				getEmail()+"\t\t"+ getUid()+"\t\t"+
 				simpleDateFormat.format(getBirthDate())+"\t\t"+getType();
 	}
-	
+	/**
+	 * Print a header for the table to be displayed to the user.
+	 */
 	public static void printIdentityHeaders() {
 		System.out.println("DisplayName\t\tEmail\t\tUID\t\tBirthday\t\tType");
 	}
