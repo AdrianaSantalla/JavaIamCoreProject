@@ -38,11 +38,8 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	Document document;
 	private Matcher<Identity> activeMatchingStrategy = new StartsWithIdentityMatcher();
 	
-	/** Costructor
-	 * @param dbf instance of document builder factory
-	 * @param db instance of document builder
-	 * @param properties gets the properties out of a configuration file
-	 * @param xmlFile gets the xml file
+	/** Constructor, creates DocumentBuilderFactory and DocumentBuilder instance. 
+	 * Gets the properties out of a configuration file
 	 */
 	public IdentityXmlDAO() {
 		try {
@@ -62,10 +59,8 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		}
 	}
 	
-	/** Gets the properties out of a configuration file
-	 * @param file the configuration file
-	 * @param fileInput managing the file input
-	 * @param properties loads the file input
+	/** Gets the properties out of a configuration file, manages and loads the file input.
+	 * @exception IOException
 	 * @return properties
 	 */
 	private static Properties getPropertiesConfigurationFile() throws IOException {
@@ -89,13 +84,12 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		});
 	}
 	
-	/** Read identities from the XML and matching them with criteria
-	 * @param resultList list to keep identities in
-	 * @param identitiesList identities from XML
-	 * @param length length of identitiesList
-	 * @param identity a single element from identitiesList
-	 * @param identityInstance single identity read from XML element to by matched and optionally added to the resultList
-	 * @return resultList
+	/**
+	 * Read identities from the XML and matching them with criteria. 
+	 * Keeps the matches in resultList and returns them at the end.
+	 * @param criteria identity to be matched
+	 * @param identityMatcher
+	 * @return resultList 
 	 */
 	private List<Identity> internalSearch(Identity criteria, Matcher<Identity> identityMatcher){
 		ArrayList<Identity> resultList = new ArrayList<Identity>();
@@ -111,14 +105,9 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		return resultList;		
 	}
 
-	/** Read the attributes of identity from the XML and returning an Identity
-	 * @param properties stores elements from XML
-	 * @param identityInstance identity instance to read into and return
-	 * @param simpleDateFormat to manage a date format of birthDate
-	 * @param property gets the element from XML
-	 * @param attribute name of property
-	 * @param value gets text content of the property
-	 * @param parsedDate to manage a date format of birthDate
+	/**
+	 * Read the attributes of identity from the XML and returning an Identity. 
+	 * @param identity an element
 	 * @return identityInstance
 	 */
 	private Identity readIdentityFromXmlElement(Element identity) {
@@ -154,6 +143,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	}
 
 	/** Search
+	 * @param criteria identity used to compare with while searching
 	 * @return List<Identity>
 	 */
 	public List<Identity> search(Identity criteria) {
@@ -161,6 +151,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	}
 	
 	/** Search used for authentication to match login details
+	 * @param criteria identity used to compare with while searching
 	 * @return List<Identity>
 	 */
 	public List<Identity> findIdentity(Identity criteria) {
@@ -169,15 +160,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	}
 
 	/** Register an Identity into a XML file
-	 * @param simpleDateFormat
-	 * @param identitiesTag
-	 * @param newIdentity
-	 * @param displayNameProperty
-	 * @param emailProperty
-	 * @param uidProperty
-	 * @param bithdateProperty
-	 * @param passwordProperty
-	 * @param typeProperty
+	 * @param identity to be written down to XML
 	 */
 	@Override
 	public void create(Identity identity) {
@@ -223,11 +206,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
         
 	}
 
-	/** Modifies a XML file when creating, updating or deleting
-	 * @param source
-	 * @param transformerFactory
-	 * @param transformer
-	 * @param result
+	/** Modifies an XML file when creating, updating or deleting
 	 */
 	private void modifyXmlFile() throws TransformerFactoryConfigurationError {
 		DOMSource source = new DOMSource(document);
@@ -253,12 +232,6 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 
 	/** Finds and deletes identity using UID
 	 * @param identityToDelete
-	 * @param identitiesList stores elements from XML
-	 * @param length length of identitiesList from XML
-	 * @param identity single identity from XML
-	 * @param properties 
-	 * @param property to compare the UIDs
-	 * @param identitiesTag to remove the identity
 	 */
 	@Override
 	public void delete(Identity identityToDelete) {
@@ -285,11 +258,6 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	 * if any, and returns updated result
 	 * @param identityStored
 	 * @param newIdentity
-	 * @param uid
-	 * @param displayName
-	 * @param email
-	 * @param birthdate
-	 * @return identityStored
 	 */
 	public Identity bindIdentities(Identity identityStored, Identity newIdentity){
 		String uid, displayName, email;
