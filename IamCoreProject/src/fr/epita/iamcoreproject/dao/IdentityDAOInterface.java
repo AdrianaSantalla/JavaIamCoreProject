@@ -2,7 +2,7 @@ package fr.epita.iamcoreproject.dao;
 
 import java.util.List;
 
-import fr.epita.iamcoreproject.dao.exceptions.DaoUpdateException;
+import fr.epita.iamcoreproject.dao.exceptions.ReflectionException;
 import fr.epita.iamcoreproject.datamodel.Identity;
 
 /**This is an interface for data access object implementations.
@@ -15,7 +15,7 @@ public interface IdentityDAOInterface {
 	public void create(Identity identity);
 	public List<Identity> readAll();
 	public List<Identity> search(Identity criteria);
-	public void update(Identity identity) throws DaoUpdateException;
+	public void update(Identity identity) throws ReflectionException;
 	public void delete(Identity identity);
 	
 	//function to find and specific user

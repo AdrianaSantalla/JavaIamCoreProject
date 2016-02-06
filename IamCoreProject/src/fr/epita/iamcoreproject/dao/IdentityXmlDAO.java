@@ -23,32 +23,60 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import fr.epita.iamcoreproject.dao.exceptions.DaoUpdateException;
+import fr.epita.iamcoreproject.dao.exceptions.ReflectionException;
 import fr.epita.iamcoreproject.datamodel.Identity;
 import fr.epita.iamcoreproject.services.match.Matcher;
+import fr.epita.iamcoreproject.services.match.impl.ContainsIdentityMatcher;
 import fr.epita.iamcoreproject.services.match.impl.EqualsIdentityMatcher;
 import fr.epita.iamcoreproject.services.match.impl.StartsWithIdentityMatcher;
 
-/** Class to manage all the manipulations with storage
+/** Class to manage all the manipulations with storage.
+ * <p>The <b>path to the XML</b> file to persist the data is in the config.properties that is the file 
+ * configuration of this project.
+ * 
+ * <p>The <code>activeMatchingStrategy</code> property of this class is used to set the pattern according
+ * to which the search function will work. This attribute is taken from config.properties file of the project
+ *   
  * @author Adriana Santalla and David Cechak
  * @version 1
  */
 public class IdentityXmlDAO implements IdentityDAOInterface {
 
 	Document document;
-	private Matcher<Identity> activeMatchingStrategy = new StartsWithIdentityMatcher();
+	private Matcher<Identity> activeMatchingStrategy;
 	
-	/** Constructor, creates DocumentBuilderFactory and DocumentBuilder instance. 
-	 * Gets the properties out of a configuration file
+	/** <b>Constructor</b>. Creates <code>DocumentBuilderFactory</code> and <code>DocumentBuilder</code> instance to access the XML File.
+	 * 	
+	 * 	<p>When the constructor is executed, it also initializes the property <code>document</code> and
+	 * 	<code>activeMatchingStrategy</code>, getting the properties out of the configuration file
 	 */
 	public IdentityXmlDAO() {
 		try {
+			//Object to access the XML File
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
+			//Class properties to read the configuration file
 			Properties properties = getPropertiesConfigurationFile();
 			// getting the property values
 			String xmlFile = properties.getProperty("xmlFile");
-			
+			String activeMatchingStrategy = properties.getProperty("activeMatchingStrategy");
+			//checking if the property was found
+			if(activeMatchingStrategy!=null){
+				// instantiating the activeMatchingStrategy according to the configuration
+				switch (activeMatchingStrategy) {
+				case "strartsWith": this.activeMatchingStrategy = new StartsWithIdentityMatcher();
+					break;
+				case "contains": this.activeMatchingStrategy = new ContainsIdentityMatcher();
+					break;
+				case "equals": this.activeMatchingStrategy = new EqualsIdentityMatcher();
+					break;
+				default: this.activeMatchingStrategy = new StartsWithIdentityMatcher();
+					break;
+				}
+			}
+			else{
+				this.activeMatchingStrategy = new StartsWithIdentityMatcher();
+			}
 			document = db.parse(new File(xmlFile));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,11 +87,12 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		}
 	}
 	
-	/** Gets the properties out of a configuration file, manages and loads the file input.
+	/** Internal Method to get the properties out of the configuration file. It looks for the file
+	 *  and loads the result in the class Properties.
 	 * @exception IOException
 	 * @return properties
 	 */
-	private static Properties getPropertiesConfigurationFile() throws IOException {
+	private Properties getPropertiesConfigurationFile() throws IOException {
 		File file = new File("config.properties");
 		FileInputStream fileInput = new FileInputStream(file);
 		Properties properties = new Properties();
@@ -72,8 +101,14 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		return properties;
 	}
 
-	/** This is creating an anonymous implementation of the Matcher interface 
-	 * and instantiating it at the same time
+	/** This method is creating an anonymous implementation of the Matcher interface 
+	 * 	and instantiating it at the same time forcing the match result to be <b>true</b>
+	 * <p>This action allows to avoid code replication because the search method has to 
+	 * go through all the XML file to find matches. The method <code>readAll</code> does the
+	 * same but it does not compare anything.
+	 * <p>That is the reason why here, a Matcher that returns always true without making
+	 * any comparison is created. This forces the internal search method to return true for all the
+	 * identities found.
 	 */
 	public List<Identity> readAll() {
 
@@ -85,11 +120,16 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	}
 	
 	/**
-	 * Read identities from the XML and matching them with criteria. 
-	 * Keeps the matches in resultList and returns them at the end.
-	 * @param criteria identity to be matched
-	 * @param identityMatcher
-	 * @return resultList 
+	 * Internal method that given an <code>NodeList</code> object, it iterates for all 
+	 * the childs with the <b>identity</b> tag name.
+	 * To split the properties from every child, is uses another internal method 
+	 * <code>readIdentityFromXmlElement()</code>
+	 * 
+	 * <p>When this method returns the Identity object created, it is compared with the criteria.
+	 * The matches are saved in the <code>ArrayList</code> resultList which is returned.
+	 * @param criteria <code>Identity</code>
+	 * @param identityMatcher <code>Matcher</code>
+	 * @return resultList <code>ArrayList</code>
 	 */
 	private List<Identity> internalSearch(Identity criteria, Matcher<Identity> identityMatcher){
 		ArrayList<Identity> resultList = new ArrayList<Identity>();
@@ -97,7 +137,12 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		int length = identitiesList.getLength();
 		for (int i = 0; i < length; i++) {
 			Element identity = (Element) identitiesList.item(i);
-			Identity identityInstance = readIdentityFromXmlElement(identity);
+			Identity identityInstance = null;
+			try {
+				identityInstance = readIdentityFromXmlElement(identity);
+			} catch (ReflectionException e) {
+				e.printStackTrace();
+			}
 			if(identityMatcher.match(criteria, identityInstance)){
 				resultList.add(identityInstance);
 			}
@@ -106,11 +151,19 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	}
 
 	/**
-	 * Read the attributes of identity from the XML and returning an Identity. 
-	 * @param identity an element
-	 * @return identityInstance
+	 * Internal method that read the properties attributes from a child with tag name <b>property</b>.
+	 * <p>In this method we use <b>reflection</b> to call the setters of given object. In this case
+	 * the object is the Identity and we call the getters for all their attributes to avoid having a big 
+	 * switch case asking for every property of Identity.
+	 * 
+	 * <p>In the case of the birthDate we cannot call its method using directly the reflection because we
+	 * to transform the <code>String</code> value into <code>date</code>
+	 * 
+	 * @param Element
+	 * @return Identity
+	 * @throws ReflectionException 
 	 */
-	private Identity readIdentityFromXmlElement(Element identity) {
+	private Identity readIdentityFromXmlElement(Element identity) throws ReflectionException {
 		NodeList properties = identity.getElementsByTagName("property");
 		Identity identityInstance = new Identity();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -128,14 +181,21 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 				}
 			}
 			else
-			{
+			{	//setting the attributes using reflection
+				//we create an anonymous class that gets the type of our identity
 				Class<?> clazz = identityInstance.getClass();
+				//we capitalize the attribute to call the setter
 				String capitalizedAttribute = Character.toUpperCase(attribute.charAt(0)) + attribute.substring(1);
+				Method method = null;
 				try {
-					Method method = clazz.getMethod("set"+capitalizedAttribute,String.class);
+					//we call the setter of the given attribute
+					method = clazz.getMethod("set"+capitalizedAttribute,String.class);
 					method.invoke(identityInstance, value);
 				} catch (Exception e) {
-					e.printStackTrace();
+					//customized exception that takes the method causing the exception
+					ReflectionException reflectionException = new ReflectionException(method);
+					reflectionException.initCause(e);
+					throw reflectionException;
 				}
 			}
 		}
@@ -160,6 +220,8 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	}
 
 	/** Register an Identity into a XML file
+	 * This function should be optimized using <b>reflection</b> again, to call getters of the identity.
+	 * <p>Under development for the next version 
 	 * @param identity to be written down to XML
 	 */
 	@Override
@@ -167,6 +229,8 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Element identitiesTag = document.getDocumentElement();
 		Element newIdentity = document.createElement("identity");
+		
+		//creating a child property with every attribute of identity
 		
 		Element displayNameProperty = document.createElement("property");
 		displayNameProperty.setAttribute("name","displayName");
@@ -192,6 +256,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		typeProperty.setAttribute("name","type");
 		typeProperty.setTextContent(identity.getType());
 		
+		//adding childs properties to identity
 		newIdentity.appendChild(displayNameProperty);
 		newIdentity.appendChild(emailProperty);
 		newIdentity.appendChild(uidProperty);
@@ -199,11 +264,8 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		newIdentity.appendChild(passwordProperty);
 		newIdentity.appendChild(typeProperty);
 		
-		
 		identitiesTag.appendChild(newIdentity);
-		
-		modifyXmlFile();
-        
+		modifyXmlFile();        
 	}
 
 	/** Modifies an XML file when creating, updating or deleting
@@ -221,11 +283,11 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		}
 	}
 
-	/** Updates the XML file using delete and create
+	/** Updates the XML file using delete and create to optimize code
 	 * @param identityUpdated identity being updated
 	 */
 	@Override
-	public void update(Identity identityUpdated) throws DaoUpdateException {
+	public void update(Identity identityUpdated) throws ReflectionException {
 		delete(identityUpdated);
 		create(identityUpdated);
 	}
@@ -255,7 +317,10 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	}
 	
 	/** Compares stored identity with a new one, updates the stored attributes with attributes from new, 
-	 * if any, and returns updated result
+	 * if any, and returns updated result.
+	 * <p>This function helps to update a given identity letting the user either insert new values or either
+	 * left them empty.
+	 * <p>
 	 * @param identityStored
 	 * @param newIdentity
 	 */

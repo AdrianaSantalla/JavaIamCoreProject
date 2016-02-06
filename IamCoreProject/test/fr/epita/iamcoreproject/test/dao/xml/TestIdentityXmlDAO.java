@@ -2,7 +2,7 @@ package fr.epita.iamcoreproject.test.dao.xml;
 
 import fr.epita.iamcoreproject.dao.IdentityDAOInterface;
 import fr.epita.iamcoreproject.dao.IdentityXmlDAO;
-import fr.epita.iamcoreproject.dao.exceptions.DaoUpdateException;
+import fr.epita.iamcoreproject.dao.exceptions.ReflectionException;
 import fr.epita.iamcoreproject.datamodel.Identity;
 
 public class TestIdentityXmlDAO {
@@ -51,7 +51,7 @@ public class TestIdentityXmlDAO {
 		dao.delete(identity);
 	}
 	
-	private static void testUpdate() throws DaoUpdateException {
+	private static void testUpdate() throws ReflectionException {
 //		IdentityDAOInterface dao = new IdentityFileDAO();
 		IdentityDAOInterface dao = new IdentityXmlDAO();
 		Identity identity = new Identity("89498","adri2@adri2.com","Adriana2");
