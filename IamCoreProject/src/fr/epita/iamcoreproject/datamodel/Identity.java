@@ -33,7 +33,6 @@ public class Identity {
 		this.uid = uid;
 		this.email = email;
 		this.displayName = displayName;
-		this.birthDate = birthDate;
 	}
 	/**
 	 * @param uid
