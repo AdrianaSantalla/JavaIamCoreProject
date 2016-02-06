@@ -29,7 +29,18 @@ public class ApplicationConsole {
 	Scanner scanner = new Scanner(System.in);
 	/**
 	 * Method to execute the <code>ApplicationConsole</code>
-	 */
+	 * <p>First it creates an instance of <code>AuthenticateActionConsole</code>
+	 * <p>Then instances of:
+	 *  <ul>
+	 * 		<li><code>AuthenticateActionConsole</code></li>
+	 * 		<li><code>CreateActionConsole</code></li>
+	 * 		<li><code>DeleteActionConsole</code></li>
+	 * 		<li><code>ReadAllActionConsole</code></li>
+	 * 		<li><code>SearchActionConsole</code></li>
+	 * 		<li><code>UpdateActionConsole</code></li>
+	 * </ul>
+	 * According to the option selected by the user.
+	 */	
 	public void run() {
 		System.out.println("Welcome to the Identities Application Management");
 		//call to the Authentication process

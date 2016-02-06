@@ -13,17 +13,18 @@ import fr.epita.iamcoreproject.datamodel.Identity;
  * This class <code>AuthenticateActionConsole</code> implements the interface <code>ActionConsole</code> and
  * thus it has the <code>execute()</code> method.
  * 
- * <p>In this class, first the username and password of the user trying to execute the application, are asked.
+ * <p>When this class is executed, first the username and password of the user trying to execute the application,
+ * are asked.
  *  
- * <p>In this project data is persisted in an XML file.This is possible using the <code>IdentityXmlDAO</code>
- * class.
+ * <p>In this project data is persisted in an XML file. To access data this data the <code>IdentityXmlDAO</code>
+ * class is needed. For example, it can be created using:
  *  
  * <blockquote><pre>{@code
  *     IdentityDAOInterface dao = new IdentityXmlDAO();
  * }</pre></blockquote>
  * 
- * <p>This instance allows the access to the data. Here the function <code>dao.findIdentity(user)</code> 
- * is used to compare username password matching. 
+ * <p>This instance allows the access to the data. Here the function <code>IdentityXmlDAO.findIdentity(Identity user)</code> 
+ * is used to compare username password matching. This method uses the matcher equals by default. 
  *  
  * @see fr.epita.iamcoreproject.dao.IdentityXmlDAO 
  * @author Adriana Santalla and David Cechak
@@ -34,10 +35,17 @@ public class AuthenticateActionConsole implements ActionConsole{
 	Scanner scanner = new Scanner(System.in);
 	
 	/**
-	 * Method to execute the <code>AuthenticateActionConsole</code>
+	 * Method to execute the <code>AuthenticateActionConsole</code> to authenticate the user
+	 * 
 	 * <p>An important assumption here, is that the <b>displayName</b> property from <code>Identity</code> is
-	 * considered as the <b>username</b> and that we just let Identities with the property type="admin" to
+	 * considered as the <b>username</b> and that we just let Identities with the property type="<b>admin</b>" to
 	 * access the application.
+	 * 
+	 * <p>The authentication is accomplished comparing the data inserted by the user using <code>Scanner</code>
+	 * and the data coming from the data storage using an instance of <code>IdentityXmlDAO</code> and its method 
+	 * <code>IdentityXmlDAO.findIdentity(Identity user)</code>
+	 * 
+	 * @see fr.epita.iamcoreproject.dao.IdentityXmlDAO 
 	 */
 	@Override
 	public void execute() {
@@ -61,23 +69,19 @@ public class AuthenticateActionConsole implements ActionConsole{
 			{
 				//getting the first user in the resulting list 
 				user = dao.findIdentity(user).get(0);
-				//verifying if it is an admin user
-				if(user.getType().equals("admin")) {
-					if(user.getDisplayName().equals(username) && user.getPassword().equals(password)) {
-						System.out.println("\nWelcome "+username);
-						state = true;
-					}
-					else {
-						System.out.println("\nAuthentication failed");
-						state = false;
-					}
+				//verifying if it is an admin user and that the password matches
+				if(user.getType().equals("admin") && user.getPassword().equals(password)) {
+					System.out.println("\nWelcome "+username);
+					state = true;
 				}
 				else {
-					System.out.println("\nYou are not an admin user");
+					//printing error message
+					System.out.println("\nAuthentication failed");
 					state = false;
 				}
 			}
 			else {
+				//printing error message
 				System.out.println("\nUnexisting user");
 				state = false;
 			}
