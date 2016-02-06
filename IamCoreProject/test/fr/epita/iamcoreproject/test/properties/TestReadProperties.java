@@ -17,7 +17,8 @@ import java.util.Properties;
 public class TestReadProperties {
 
 	/**
-	 * @param args
+	 * @param args Strings to call main
+	 * @throws Exception FileNotFound
 	 */
 	public static void main(String[] args) throws Exception {
 		try {

@@ -14,14 +14,12 @@ public class ReflectionException extends Exception{
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Personalizing the message of the Exception
-	 * @param problematicInstance
+	 * @param problematicInstance object causing the exception
 	 */
 	public ReflectionException(Object problematicInstance) {
 		// use String.valueOf() instead of toString() when you are not sure of the parameter initialization
 		super("a problem occured while using reflection with " + String.valueOf(problematicInstance));
 
 	}
-	
-	
 
 }

@@ -204,7 +204,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 
 	/** Search
 	 * @param criteria identity used to compare with while searching
-	 * @return List<Identity>
+	 * @return List of identities
 	 */
 	public List<Identity> search(Identity criteria) {
 		return internalSearch(criteria, activeMatchingStrategy);
@@ -212,7 +212,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	
 	/** Search used for authentication to match login details
 	 * @param criteria identity used to compare with while searching
-	 * @return List<Identity>
+	 * @return List of identities
 	 */
 	public List<Identity> findIdentity(Identity criteria) {
 		Matcher<Identity> activeMatchingStrategy = new EqualsIdentityMatcher();
@@ -256,7 +256,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 		typeProperty.setAttribute("name","type");
 		typeProperty.setTextContent(identity.getType());
 		
-		//adding childs properties to identity
+		//adding children properties to identity
 		newIdentity.appendChild(displayNameProperty);
 		newIdentity.appendChild(emailProperty);
 		newIdentity.appendChild(uidProperty);
@@ -293,7 +293,7 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	}
 
 	/** Finds and deletes identity using UID
-	 * @param identityToDelete
+	 * @param identityToDelete Identity that will be deleted
 	 */
 	@Override
 	public void delete(Identity identityToDelete) {
@@ -320,9 +320,9 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 	 * if any, and returns updated result.
 	 * <p>This function helps to update a given identity letting the user either insert new values or either
 	 * left them empty.
-	 * <p>
-	 * @param identityStored
-	 * @param newIdentity
+	 * 
+	 * @param identityStored Identity from the XML file
+	 * @param newIdentity Identity that comes from the user input
 	 */
 	public Identity bindIdentities(Identity identityStored, Identity newIdentity){
 		String uid, displayName, email;

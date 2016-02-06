@@ -18,8 +18,8 @@ package fr.epita.iamcoreproject.services.match;
 public interface Matcher<T> {
 	/**
 	 * 
-	 * @param criteria
-	 * @param toBeMatched
+	 * @param criteria Object containing the data to search
+	 * @param toBeMatched Object containing the data to match with the search
 	 * @return true if the criteria matches the toBeMatched instance
 	 */
 	public boolean match(T criteria, T toBeMatched);

@@ -132,7 +132,7 @@ public class CreateActionConsole implements ActionConsole{
 	}
 	/**
 	 * This method was taken from:
-	 * {@link http://stackoverflow.com/questions/624581/what-is-the-best-java-email-address-validation-method}
+	 * http://stackoverflow.com/questions/624581/what-is-the-best-java-email-address-validation-method
 	 * 
 	 * It verifies whether an email is valid or not
 	 * 

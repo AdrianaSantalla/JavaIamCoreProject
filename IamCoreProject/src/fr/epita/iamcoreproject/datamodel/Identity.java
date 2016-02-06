@@ -29,9 +29,9 @@ public class Identity {
 	public Identity() {
 	}
 	/**
-	 * @param uid
-	 * @param email
-	 * @param displayName
+	 * @param uid unique id of an identity
+	 * @param email email address
+	 * @param displayName name
 	 */
 	public Identity(String uid, String email, String displayName) {
 		this.uid = uid;
@@ -39,10 +39,10 @@ public class Identity {
 		this.displayName = displayName;
 	}
 	/**
-	 * @param uid
-	 * @param email
-	 * @param displayName
-	 * @param birthDate
+	 * @param uid unique id of an identity
+	 * @param email email address
+	 * @param displayName name
+	 * @param birthDate date of birth
 	 */
 	public Identity(String uid, String email, String displayName, Date birthDate) {
 		this.uid = uid;
@@ -117,25 +117,16 @@ public class Identity {
 	public String getType() {
 		return type;
 	}
-	/**
-	 * 
-	 * @param other
-	 * @return
-	 */
-	public boolean isMatched(Identity other) {
-		return getType().equals("admin") && getDisplayName().equals(other.getDisplayName()) 
-				&& getPassword().equals(other.getPassword());
-	}
 	
 	/**
-	 * @param type the type to set
+	 * @param type the type to set whether admin or normal identity 
 	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * Function to string overwritten
 	 */
 	@Override
 	public String toString() {
@@ -144,7 +135,7 @@ public class Identity {
 	}
 	/**
 	 * Transforms classic toString into a better human-readable table to be print for the user.
-	 * @return
+	 * @return String
 	 */
 	public String toReadableString() {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");

@@ -6,9 +6,10 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 /**
- * 
- * @author Adriana Santalla
- * <p>Code taken from {@link http://www.mkyong.com/java/java-properties-file-examples/}
+ * Code taken from link http://www.mkyong.com/java/java-properties-file-examples/
+ * <p>Test to read the properties file 
+ * @author Adriana Santalla and David Cechak
+ * @version 1;
  */
 public class TestFileProperties {
 	
