@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- The whole file is known as a "Document" according to the DOM specifications --><!-- XML stands for eXtensible Markup Language, so data are represented with markups, organized in a hierarchical way --><!-- this tag is named the root "Element" --><identities>
-	
 	<!-- this tag is the child of "identities", this is an Element -->
 	<identity>
 		<!-- the 'name="displayName"' part is called an attribute declaration -->

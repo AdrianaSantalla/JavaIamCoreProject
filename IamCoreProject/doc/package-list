@@ -1,0 +1,12 @@
+fr.epita.iamcoreproject.console
+fr.epita.iamcoreproject.console.action
+fr.epita.iamcoreproject.console.action.impl
+fr.epita.iamcoreproject.dao
+fr.epita.iamcoreproject.dao.exceptions
+fr.epita.iamcoreproject.datamodel
+fr.epita.iamcoreproject.launcher
+fr.epita.iamcoreproject.services.match
+fr.epita.iamcoreproject.services.match.impl
+fr.epita.iamcoreproject.test
+fr.epita.iamcoreproject.test.dao.xml
+fr.epita.iamcoreproject.test.properties
