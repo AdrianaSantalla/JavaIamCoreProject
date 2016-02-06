@@ -7,8 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @author Adriana Santalla
- *
+ * This is the main concept of the project the Identity.
+ * <p>An identity has the 6 attributes. The last two are to manage the login and type of account
+ * 
+ * @author Adriana Santalla and David Cechak
+ * @version 1
  */
 public class Identity {
 	private String uid;
