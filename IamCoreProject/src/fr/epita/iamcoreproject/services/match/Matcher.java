@@ -1,11 +1,11 @@
 package fr.epita.iamcoreproject.services.match;
 
 /**
- * 
- * @author Adriana Santalla
- * This is an interface to define the Matcher behavior
- *
+ * @author Adriana Santalla and David Cechak
+ * @version 1
  * @param <T>
+ * @return (methods only)
+ * @exception (@throws is a synonym added in Javadoc 1.2)
  */
 public interface Matcher<T> {
 	/**

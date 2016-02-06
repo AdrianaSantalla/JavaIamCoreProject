@@ -108,7 +108,6 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 			else
 			{
 				Class<?> clazz = identityInstance.getClass();
-				//clazz.getDeclaredField(attribute);
 				String capitalizedAttribute = Character.toUpperCase(attribute.charAt(0)) + attribute.substring(1);
 				try {
 					Method method = clazz.getMethod("set"+capitalizedAttribute,String.class);
@@ -190,7 +189,8 @@ public class IdentityXmlDAO implements IdentityDAOInterface {
 
 	@Override
 	public void update(Identity identityUpdated) throws DaoUpdateException {
-		// TODO Auto-generated method stub
+		delete(identityUpdated);
+		create(identityUpdated);
 	}
 
 	@Override

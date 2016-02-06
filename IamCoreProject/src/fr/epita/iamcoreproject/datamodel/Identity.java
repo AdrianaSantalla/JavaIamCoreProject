@@ -3,6 +3,7 @@
  */
 package fr.epita.iamcoreproject.datamodel;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -46,6 +47,7 @@ public class Identity {
 		this.displayName = displayName;
 		this.birthDate = birthDate;
 	}
+	
 	/**
 	 * @return the uid
 	 */
@@ -112,6 +114,12 @@ public class Identity {
 	public String getType() {
 		return type;
 	}
+	
+	public boolean isMatched(Identity other) {
+		return getType().equals("admin") && getDisplayName().equals(other.getDisplayName()) 
+				&& getPassword().equals(other.getPassword());
+	}
+	
 	/**
 	 * @param type the type to set
 	 */
@@ -126,5 +134,16 @@ public class Identity {
 	public String toString() {
 		return "Identity [uid=" + uid + ", email=" + email + ", displayName=" + displayName + ", birthDate=" + birthDate
 				+ ", password=" + password + ", type=" + type + "]";
-	}	
+	}
+	
+	public String toReadableString() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		return getDisplayName()+"\t\t"+
+				getEmail()+"\t\t"+ getUid()+"\t\t"+
+				simpleDateFormat.format(getBirthDate())+"\t\t"+getType();
+	}
+	
+	public static void printIdentityHeaders() {
+		System.out.println("DisplayName\t\tEmail\t\tUID\t\tBirthday\t\tType");
+	}
 }
